@@ -37,18 +37,31 @@ function Orders() {
 
       const handleSubmit = () => {
         const productsIds = selectedProducts.map(({ id }) => ({ id }));
+
         const payload = {
           ...orderLocation!,
           products: productsIds
         }
-      
-        saveOrders(payload).then((response) => {
-          toast.error(`Pedido enviado com sucesso! Nº ${response.data.id}`);
-          setSelectedProducts([]);
-        })
-          .catch(() => {
-            toast.warning('Erro ao enviar pedido!');
-          })
+
+        console.log(`Address: ${orderLocation?.address}`);
+        console.log(productsIds.length);
+
+        orderLocation?.address !== undefined ? (
+                                                productsIds.length > 0 ? (
+                                                  saveOrders(payload).then((response) => {
+                                                    toast.error(`Pedido enviado com sucesso! Nº ${response.data.id}`);
+                                                    setSelectedProducts([]);
+                                                  })
+                                                  .catch(() => {
+                                                    toast.warning('Erro ao enviar pedido!');
+                                                  })
+                                                ) 
+                                                : 
+                                                toast.warning('Você precisa escolher pelo menos um produto!') 
+                                              ) 
+                                              : 
+                                              toast.warning('Você precisa informar o endereço para prosseguir!')
+
       }
 
     return(
